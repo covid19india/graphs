@@ -8,6 +8,7 @@ var data_tt_confirmed = [];
 var data_tt_active = [];
 var data_tt_recovered = [];
 var data_tt_deceased = [];
+var data_tt_tested = [];
 function pusher(a, b) {
     isNaN(b) ? a.push(0) : a.push(b);
     return a;
@@ -20,6 +21,7 @@ fetch(url)
             data_tt_confirmed.push(data[date]['TT'].total.confirmed);
             data_tt_recovered.push(data[date]['TT'].total.recovered || 0);
             data_tt_deceased.push(data[date]['TT'].total.deceased || 0);
+            data_tt_tested.push(data[date]['TT'].total.tested || 0);
             data_tt_active.push(data[date]['TT'].total.confirmed
                 - (data[date]['TT'].total.recovered || 0)
                 - (data[date]['TT'].total.deceased || 0)
@@ -47,22 +49,27 @@ fetch(url)
                     }
                 }]
             },
+            colors: ['#ff073a', '#007bff', '#28a745', '#6c757d', '#261ebd'],
             series: [
                 {
                     name: 'Confirmed',
-                    data: data_tt_confirmed
+                    data: data_tt_confirmed,
+                },
+                {
+                    name: 'Active',
+                    data: data_tt_active
                 },
                 {
                     name: 'Recovered',
                     data: data_tt_recovered
                 },
                 {
-                    name: 'Deaceased',
+                    name: 'Deceased',
                     data: data_tt_deceased
                 },
                 {
-                    name: 'Active',
-                    data: data_tt_active
+                    name: 'Tested',
+                    data: data_tt_tested
                 },
 
             ],
