@@ -15,7 +15,7 @@ var data_tt_tested_delta = [];
 var annotations = {
     xaxis: [
         {
-            x: "2020-03-25",
+            x: new Date("2020-03-25").getTime(),
             strokeDashArray: 0,
             borderColor: '#775DD0',
             label: {
@@ -28,7 +28,7 @@ var annotations = {
             }
         },
         {
-            x: "2020-04-15",
+            x: new Date("2020-04-15").getTime(),
             borderColor: '#775DD0',
             label: {
                 borderColor: '#775DD0',
@@ -36,7 +36,7 @@ var annotations = {
             }
         },
         {
-            x: "2020-05-04",
+            x: new Date("2020-05-04").getTime(),
             borderColor: '#775DD0',
             label: {
                 borderColor: '#775DD0',
@@ -44,7 +44,7 @@ var annotations = {
             }
         },
         {
-            x: "2020-05-18",
+            x: new Date("2020-05-18").getTime(),
             borderColor: '#775DD0',
             label: {
                 borderColor: '#775DD0',
@@ -52,7 +52,7 @@ var annotations = {
             }
         },
         {
-            x: "2020-06-01",
+            x: new Date("2020-06-01").getTime(),
             borderColor: '#775DD0',
             label: {
                 borderColor: '#775DD0',
@@ -63,31 +63,56 @@ var annotations = {
 
 };
 
+var states_series = {};
+var chart_states;
 
 fetch(url_timeseries)
     .then(res => res.json())
     .then((data) => {
 
         for (var date in data["TT"]) {
-            console.log(date);
             categories.push(date);
-
-            data_tt_confirmed_delta.push(data["TT"][date].delta.confirmed || 0);
-            data_tt_recovered_delta.push(data["TT"][date].delta.recovered || 0);
-            data_tt_deceased_delta.push(data["TT"][date].delta.deceased || 0);
-            data_tt_tested_delta.push(data["TT"][date].delta.tested || 0);
+            data_tt_confirmed_delta.push({ x: date, y: data["TT"][date].delta.confirmed || 0 });
+            data_tt_recovered_delta.push({ x: date, y: data["TT"][date].delta.recovered || 0 });
+            data_tt_deceased_delta.push({ x: date, y: data["TT"][date].delta.deceased || 0 });
+            data_tt_tested_delta.push({ x: date, y: data["TT"][date].delta.tested || 0 });
             // data_tt_active_delta.push(data["TT"][date].delta.confirmed || 0);
 
-            data_tt_confirmed.push(data["TT"][date].total.confirmed || 0);
-            data_tt_recovered.push(data["TT"][date].total.recovered || 0);
-            data_tt_deceased.push(data["TT"][date].total.deceased || 0);
-            data_tt_tested.push(data["TT"][date].total.tested || 0);
-            data_tt_active.push(data["TT"][date].total.confirmed
-                - (data["TT"][date].total.recovered || 0)
-                - (data["TT"][date].total.deceased || 0)
+            data_tt_confirmed.push({ x: date, y: data["TT"][date].total.confirmed || 0 });
+            data_tt_recovered.push({ x: date, y: data["TT"][date].total.recovered || 0 });
+            data_tt_deceased.push({ x: date, y: data["TT"][date].total.deceased || 0 });
+            data_tt_tested.push({ x: date, y: data["TT"][date].total.tested || 0 });
+            data_tt_active.push({
+                x: date, y: data["TT"][date].total.confirmed
+                    - (data["TT"][date].total.recovered || 0)
+                    - (data["TT"][date].total.deceased || 0)
+            }
             );
 
         }
+        for (var state in data) {
+            if (state == "TT") {
+                continue;
+            }
+            if (!(state in states_series)) {
+                states_series[state] = [];
+            }
+            for (var date in data[state]) {
+                states_series[state].push({ x: date, y: data[state][date].total.confirmed || 0 });
+            }
+        }
+        // console.log(states_series);
+        var states_series_data = [];
+        for (var state in states_series) {
+            states_series_data.push(
+                {
+                    name: state,
+                    data: states_series[state]
+                }
+            );
+        }
+        states_series_data.sort((a, b) => (a.data.slice(-1)[0]["y"] > b.data.slice(-1)[0]["y"]) ? 1 : -1);
+        console.log(states_series_data);
 
 
         var options_daily = {
@@ -101,7 +126,7 @@ fetch(url_timeseries)
                 xaxis: annotations.xaxis,
                 points: [
                     {
-                        x: '2020-06-16',
+                        x: new Date('2020-06-16').getTime(),
                         y: 2004,
                         marker: {
                             size: 8,
@@ -121,7 +146,7 @@ fetch(url_timeseries)
                             text: 'Backdated deaths reported by MH',
                         }
                     }, {
-                        x: '2020-05-29',
+                        x: new Date('2020-05-29').getTime(),
                         y: 11735,
                         marker: {
                             size: 8,
@@ -164,7 +189,7 @@ fetch(url_timeseries)
                 },
             ],
             xaxis: {
-                categories: categories
+                type: "datetime"
             }
         }
 
@@ -201,16 +226,38 @@ fetch(url_timeseries)
 
             ],
             xaxis: {
-                categories: categories
+                type: "datetime"
             }
-        }
+        };
+
+        var options_states_daily = {
+            chart: {
+                type: 'line',
+            },
+            annotations: annotations,
+            series: states_series_data,
+            xaxis: {
+                type: "datetime"
+            }
+        };
 
         var chart_cumulative = new ApexCharts(document.querySelector("#chart-cumulative"), options_cumulative);
         chart_cumulative.render();
+        chart_cumulative.toggleSeries('Tested')
 
 
         var chart_daily = new ApexCharts(document.querySelector("#chart-daily"), options_daily);
         chart_daily.render();
+        chart_daily.toggleSeries('Tested')
+
+        chart_states = new ApexCharts(document.querySelector("#chart-states-daily"), options_states_daily);
+        chart_states.render();
+
 
     })
     .catch(err => { throw err });
+function toggleall() {
+    for (var state in states_series) {
+        chart_states.toggleSeries(state);
+    }
+}

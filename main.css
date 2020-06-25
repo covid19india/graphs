@@ -4,7 +4,7 @@ body {
   font-family: Roboto, sans-serif;
 }
 
-#chart-daily, #chart-cumulative {
+#chart-daily, #chart-cumulative, #chart-states-daily{
   max-width: 950px;
   margin: 35px auto;
 }
