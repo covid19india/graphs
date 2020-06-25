@@ -35,19 +35,54 @@ fetch(url)
                 type: 'line'
             },
             annotations: {
-                xaxis: [{
-                    x: "2020-05-10",
-                    strokeDashArray: 0,
-                    borderColor: '#775DD0',
-                    label: {
+                xaxis: [
+                    {
+                        x: "2020-03-25",
+                        strokeDashArray: 0,
                         borderColor: '#775DD0',
-                        style: {
-                            color: '#fff',
-                            background: '#775DD0',
-                        },
-                        text: 'Some important event',
+                        label: {
+                            borderColor: '#775DD0',
+                            // style: {
+                            //     color: '#fff',
+                            //     background: '#775DD0',
+                            // },
+                            text: 'Lockdown Phase 1',
+                        }
+                    },
+                    {
+                        x: "2020-04-15",
+                        borderColor: '#775DD0',
+                        label: {
+                            borderColor: '#775DD0',
+                            text: 'Lockdown Phase 2',
+                        }
+                    },
+                    {
+                        x: "2020-05-04",
+                        borderColor: '#775DD0',
+                        label: {
+                            borderColor: '#775DD0',
+                            text: 'Lockdown Phase 3',
+                        }
+                    },
+                    {
+                        x: "2020-05-18",
+                        borderColor: '#775DD0',
+                        label: {
+                            borderColor: '#775DD0',
+                            text: 'Lockdown Phase 4',
+                        }
+                    },
+                    {
+                        x: "2020-06-01",
+                        borderColor: '#775DD0',
+                        label: {
+                            borderColor: '#775DD0',
+                            text: 'Lockdown Phase 5',
+                        }
                     }
-                }]
+                ],
+
             },
             colors: ['#ff073a', '#007bff', '#28a745', '#6c757d', '#261ebd'],
             series: [
