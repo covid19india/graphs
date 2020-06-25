@@ -99,27 +99,50 @@ fetch(url_timeseries)
             },
             annotations: {
                 xaxis: annotations.xaxis,
-                points: [{
-                    x: '2020-06-16',
-                    y: 2004,
-                    marker: {
-                        size: 8,
-                        fillColor: '#fff',
-                        strokeColor: 'red',
-                        radius: 2,
-                        cssClass: 'apexcharts-custom-class'
-                    },
-                    label: {
-                        borderColor: '#FF4560',
-                        offsetY: 0,
-                        style: {
-                            color: '#fff',
-                            background: '#FF4560',
+                points: [
+                    {
+                        x: '2020-06-16',
+                        y: 2004,
+                        marker: {
+                            size: 8,
+                            fillColor: '#fff',
+                            strokeColor: 'red',
+                            radius: 2,
+                            cssClass: 'apexcharts-custom-class'
                         },
+                        label: {
+                            borderColor: '#FF4560',
+                            offsetY: 0,
+                            style: {
+                                color: '#fff',
+                                background: '#FF4560',
+                            },
 
-                        text: 'Backdated deaths reported by MH',
+                            text: 'Backdated deaths reported by MH',
+                        }
+                    }, {
+                        x: '2020-05-29',
+                        y: 11735,
+                        marker: {
+                            size: 8,
+                            fillColor: '#fff',
+                            strokeColor: 'green',
+                            radius: 2,
+                            cssClass: 'apexcharts-custom-class'
+                        },
+                        label: {
+                            borderColor: '#28a745',
+                            offsetY: 0,
+                            style: {
+                                color: '#fff',
+                                background: '#28a745',
+                            },
+
+                            text: 'Mass discharge by MH',
+                        }
                     }
-                }]
+
+                ]
             },
             colors: ['#ff073a', '#28a745', '#6c757d', '#261ebd'],
             series: [
