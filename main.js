@@ -98,7 +98,9 @@ fetch(url_timeseries)
                 states_series[state] = [];
             }
             for (var date in data[state]) {
-                states_series[state].push({ x: date, y: data[state][date].total.confirmed || 0 });
+                if(data[state][date].total){
+                    states_series[state].push({ x: date, y: data[state][date].total.confirmed || 0 });
+                }
             }
         }
         // console.log(states_series);
